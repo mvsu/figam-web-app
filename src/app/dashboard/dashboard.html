@@ -1,4 +1,4 @@
-<div class="page">
+<div class="page dashboard-page">
   <header class="page-head">
     <div>
       <span class="eyebrow">System overview</span>
@@ -7,6 +7,11 @@
     </div>
     <div class="live-badge"><span></span>Live telemetry</div>
   </header>
+
+  <section class="panel panel-body update-check">
+    <h2 class="panel-title"><app-icon name="refresh" />Windows Update driver check</h2>
+    <p class="mb-0 text-body-secondary">Not checked yet. The check only looks; it downloads and installs nothing until you press Install on an update.</p>
+  </section>
 
   @if (error(); as e) {
     <div class="alert alert-danger" role="alert">{{ e }}</div>

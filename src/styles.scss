@@ -97,6 +97,25 @@ body {
   margin: 0 auto;
 }
 
+.dashboard-page {
+  .page-head,
+  > .update-check {
+    margin-bottom: 0.75rem;
+  }
+
+  > .update-check {
+    border-radius: 12px;
+  }
+
+  > .alert {
+    margin-bottom: 0;
+  }
+
+  > .alert + .metric-grid {
+    padding-top: 1rem;
+  }
+}
+
 .page-head {
   display: flex;
   flex-wrap: wrap;
