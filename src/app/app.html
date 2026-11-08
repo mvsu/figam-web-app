@@ -6,11 +6,14 @@
     </div>
 
     <nav aria-label="Sections">
+      <span class="nav-caption">Overview</span>
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"><app-icon name="dashboard" />Dashboard</a>
+      <span class="nav-caption">Applications</span>
       <a routerLink="/software" routerLinkActive="active"><app-icon name="software" />Software</a>
       <a routerLink="/updates" routerLinkActive="active"><app-icon name="download" />App updates</a>
       <a routerLink="/catalog" routerLinkActive="active"><app-icon name="package" />App catalog</a>
       <a routerLink="/find" routerLinkActive="active"><app-icon name="search" />Find apps</a>
+      <span class="nav-caption">System</span>
       <a routerLink="/processes" routerLinkActive="active"><app-icon name="processes" />Processes</a>
       <a routerLink="/startup" routerLinkActive="active"><app-icon name="power" />Startup</a>
       <a routerLink="/cleanup" routerLinkActive="active"><app-icon name="trash" />Cleanup</a>
@@ -20,6 +23,11 @@
       <a routerLink="/drivers" routerLinkActive="active"><app-icon name="board" />Drivers</a>
       <a routerLink="/blocked" routerLinkActive="active"><app-icon name="shield" />Blocked</a>
     </nav>
+
+    <div class="device-status">
+      <span class="status-dot"></span>
+      <span><strong>Local device</strong><small>Monitoring active</small></span>
+    </div>
 
     <div class="appearance">
       <span class="caption" id="theme-label">Appearance</span>

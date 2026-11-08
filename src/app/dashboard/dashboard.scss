@@ -1,5 +1,100 @@
+.eyebrow,
+.section-kicker {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.66rem;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.live-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.2rem;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.72rem;
+  font-weight: 650;
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  border-radius: 99px;
+
+  span {
+    width: 7px;
+    height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
+    animation: pulse 2s ease-out infinite;
+  }
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.stat {
+  position: relative;
+  min-height: 164px;
+  padding: 1.1rem 1.2rem;
+
+  &::after {
+    position: absolute;
+    right: -25px;
+    bottom: -36px;
+    width: 100px;
+    height: 100px;
+    content: "";
+    background: var(--metric-tint, var(--accent-soft));
+    border-radius: 50%;
+  }
+}
+
+.stat-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  > span {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--bs-border-color);
+  }
+}
+
+.stat-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  margin-top: 1.25rem;
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-weight: 650;
+  letter-spacing: -0.065em;
+}
+
+.stat-sub {
+  position: relative;
+  z-index: 1;
+  max-width: 13rem;
+  font-size: 0.74rem;
+}
+
+.stat-memory { --metric-tint: color-mix(in srgb, var(--viz-ram) 18%, transparent); }
+.stat-uptime { --metric-tint: color-mix(in srgb, #7c72db 18%, transparent); }
+.stat-battery { --metric-tint: color-mix(in srgb, #b7f267 25%, transparent); }
+
 .chart {
   position: relative;
+  margin-top: 0.75rem;
 }
 
 svg {
@@ -11,6 +106,7 @@ svg {
 .grid {
   stroke: var(--bs-border-color);
   stroke-width: 1px;
+  stroke-dasharray: 3 5;
 }
 
 .tick {
@@ -20,7 +116,7 @@ svg {
 
 .line {
   fill: none;
-  stroke-width: 2px;
+  stroke-width: 2.5px;
   stroke-linecap: round;
   stroke-linejoin: round;
 
@@ -45,7 +141,7 @@ svg {
 .line-key {
   display: inline-block;
   width: 14px;
-  height: 2px;
+  height: 3px;
   margin-right: 6px;
   vertical-align: middle;
 
@@ -54,7 +150,23 @@ svg {
 }
 
 .legend {
+  font-size: 0.72rem;
+  font-weight: 600;
   color: var(--bs-secondary-color);
+}
+
+.chart-heading {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 680;
+  letter-spacing: -0.025em;
+}
+
+.disk-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.55rem;
 }
 
 .tip {
@@ -74,11 +186,89 @@ svg {
 }
 
 .progress {
-  height: 8px;
+  height: 6px;
   background: var(--surface-2);
   border-radius: 99px;
 }
 
 .progress-bar {
   border-radius: 99px;
+}
+
+.hardware-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  margin: 1.8rem 0 0.8rem;
+
+  h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 680;
+    letter-spacing: -0.035em;
+  }
+
+  > span {
+    font-size: 0.72rem;
+    color: var(--bs-secondary-color);
+  }
+}
+
+.hardware-card {
+  position: relative;
+  min-height: 168px;
+  padding: 1.15rem;
+  transition: transform 180ms var(--ease-out), border-color 180ms ease, box-shadow 180ms ease;
+
+  h3 {
+    margin: 1rem 0 0.55rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+}
+
+.hardware-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+  border-radius: 11px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hardware-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 38%, var(--bs-border-color));
+    box-shadow: 0 16px 34px rgb(18 36 29 / 0.08);
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes pulse {
+  70%,
+  100% {
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent) 0%, transparent);
+  }
+}
+
+@media (max-width: 1120px) {
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat {
+    min-height: 145px;
+  }
+
+  .live-badge {
+    display: none;
+  }
 }

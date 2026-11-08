@@ -1,19 +1,21 @@
 <div class="page">
   <header class="page-head">
     <div>
+      <span class="eyebrow">System overview</span>
       <h1>Dashboard</h1>
-      <p class="text-body-secondary">What this PC is doing right now.</p>
+      <p class="text-body-secondary">A live read on performance, capacity, and hardware.</p>
     </div>
+    <div class="live-badge"><span></span>Live telemetry</div>
   </header>
 
   @if (error(); as e) {
     <div class="alert alert-danger" role="alert">{{ e }}</div>
   }
 
-  <div class="row g-3 mb-3">
+  <div class="metric-grid mb-3">
     <div class="col-md">
-      <div class="panel stat h-100">
-        <div class="stat-label"><app-icon name="cpu" />CPU</div>
+      <div class="panel stat stat-cpu h-100">
+        <div class="stat-top"><div class="stat-label"><app-icon name="cpu" />CPU</div><span>01</span></div>
         <div class="stat-value">{{ percentText(cpuNow()) }}</div>
         <div class="stat-sub text-body-secondary">
           @if (overview(); as o) {
@@ -23,8 +25,8 @@
       </div>
     </div>
     <div class="col-md">
-      <div class="panel stat h-100">
-        <div class="stat-label"><app-icon name="memory" />Memory</div>
+      <div class="panel stat stat-memory h-100">
+        <div class="stat-top"><div class="stat-label"><app-icon name="memory" />Memory</div><span>02</span></div>
         <div class="stat-value">{{ percentText(ramNow()) }}</div>
         <div class="stat-sub text-body-secondary">
           @if (live(); as l) {
@@ -34,8 +36,8 @@
       </div>
     </div>
     <div class="col-md">
-      <div class="panel stat h-100">
-        <div class="stat-label"><app-icon name="clock" />Uptime</div>
+      <div class="panel stat stat-uptime h-100">
+        <div class="stat-top"><div class="stat-label"><app-icon name="clock" />Uptime</div><span>03</span></div>
         <div class="stat-value">{{ live() ? uptimeText(live()!.uptime) : '-' }}</div>
         <div class="stat-sub text-body-secondary">Since the last restart</div>
       </div>
@@ -43,8 +45,8 @@
     @if (battery(); as b) {
       @if (b.present) {
         <div class="col-md">
-          <div class="panel stat h-100">
-            <div class="stat-label"><app-icon name="battery" />Battery</div>
+          <div class="panel stat stat-battery h-100">
+            <div class="stat-top"><div class="stat-label"><app-icon name="battery" />Battery</div><span>04</span></div>
             <div class="stat-value">{{ b.percent != null ? b.percent + '%' : '-' }}</div>
             <div class="stat-sub text-body-secondary">{{ batteryLine(b) }}</div>
           </div>
@@ -57,7 +59,10 @@
     <div class="col-lg-8">
       <section class="panel panel-body h-100">
         <div class="d-flex flex-wrap align-items-center gap-3 mb-2">
-          <h2 class="panel-title mb-0 me-auto">Live usage, last 2 minutes</h2>
+          <div class="me-auto">
+            <span class="section-kicker">Performance</span>
+            <h2 class="chart-heading">Live usage</h2>
+          </div>
           <span class="legend"><i class="line-key cpu"></i>CPU</span>
           <span class="legend"><i class="line-key ram"></i>Memory</span>
         </div>
@@ -101,7 +106,8 @@
 
     <div class="col-lg-4">
       <section class="panel panel-body h-100">
-        <h2 class="panel-title"><app-icon name="disk" />Disk space</h2>
+        <span class="section-kicker">Capacity</span>
+        <h2 class="chart-heading disk-heading"><app-icon name="disk" />Disk space</h2>
         @for (d of live()?.disks; track d.name) {
           <div class="mb-3">
             <div class="d-flex justify-content-between">
@@ -120,11 +126,19 @@
   </div>
 
   @if (parts().length) {
-    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
+    <div class="hardware-head">
+      <div>
+        <span class="section-kicker">Inventory</span>
+        <h2>Inside this machine</h2>
+      </div>
+      <span>{{ parts().length }} components</span>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 hardware-grid">
       @for (p of parts(); track p.title) {
         <div class="col">
-          <section class="panel panel-body h-100">
-            <h2 class="panel-title"><app-icon [name]="p.icon" />{{ p.title }}</h2>
+          <section class="panel panel-body h-100 hardware-card">
+            <div class="hardware-icon"><app-icon [name]="p.icon" /></div>
+            <h3>{{ p.title }}</h3>
             @for (line of p.lines; track $index) {
               <div [class.text-body-secondary]="$index > 0">{{ line }}</div>
             }

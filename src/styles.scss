@@ -2,48 +2,58 @@
 
 :root {
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --radius: 12px;
+  --radius: 18px;
   --bs-body-font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
   --bs-body-font-size: 0.875rem;
 }
 
 // Both themes redefine the same tokens, so components only use var(--token).
 [data-bs-theme="light"] {
-  --bs-body-bg: #f4f5f8;
-  --bs-body-color: #1a2030;
-  --bs-secondary-color: #5d6679;
-  --bs-border-color: #e1e4eb;
-  --bs-primary: #2f5fe0;
-  --bs-primary-rgb: 47, 95, 224;
-  --surface: #ffffff;
-  --surface-2: #eef0f5;
-  --accent: #2f5fe0;
-  --accent-ink: #2449b8;
-  --accent-soft: #e6ecfd;
+  --bs-body-bg: #eef0eb;
+  --bs-body-color: #18201e;
+  --bs-secondary-color: #68726e;
+  --bs-border-color: #d9ded7;
+  --bs-primary: #19725e;
+  --bs-primary-rgb: 25, 114, 94;
+  --surface: #f9faf7;
+  --surface-2: #e7ebe5;
+  --accent: #19725e;
+  --accent-ink: #0d5948;
+  --accent-soft: #d8ece4;
+  --sidebar: #18211f;
+  --sidebar-ink: #f3f7f3;
+  --sidebar-muted: #91a09a;
+  --sidebar-line: #2d3935;
+  --signal: #b7f267;
   --danger: #c62d3d;
   --danger-soft: #fdecee;
-  --ok: #1a8f3c;
-  --viz-cpu: #2a78d6;
-  --viz-ram: #eb6834;
+  --ok: #19725e;
+  --viz-cpu: #1f8069;
+  --viz-ram: #e37a45;
 }
 
 [data-bs-theme="dark"] {
-  --bs-body-bg: #0e1117;
-  --bs-body-color: #e7eaf0;
-  --bs-secondary-color: #9aa3b4;
-  --bs-border-color: #262c38;
-  --bs-primary: #5b8cff;
-  --bs-primary-rgb: 91, 140, 255;
-  --surface: #161b24;
-  --surface-2: #1f2633;
-  --accent: #5b8cff;
-  --accent-ink: #9bb8ff;
-  --accent-soft: #1b2a4f;
+  --bs-body-bg: #101614;
+  --bs-body-color: #edf2ee;
+  --bs-secondary-color: #96a29c;
+  --bs-border-color: #2b3531;
+  --bs-primary: #74d3b5;
+  --bs-primary-rgb: 116, 211, 181;
+  --surface: #18201e;
+  --surface-2: #222d29;
+  --accent: #74d3b5;
+  --accent-ink: #a7ead5;
+  --accent-soft: #203f36;
+  --sidebar: #0b100f;
+  --sidebar-ink: #f3f7f3;
+  --sidebar-muted: #7f8e88;
+  --sidebar-line: #25302c;
+  --signal: #b7f267;
   --danger: #ff7a85;
   --danger-soft: #3a1c22;
-  --ok: #4cc275;
-  --viz-cpu: #3987e5;
-  --viz-ram: #d95926;
+  --ok: #74d3b5;
+  --viz-cpu: #74d3b5;
+  --viz-ram: #f09462;
 }
 
 html,
@@ -73,7 +83,7 @@ body {
 // Page layout
 
 .page {
-  max-width: 1180px;
+  max-width: 1280px;
   margin: 0 auto;
 }
 
@@ -94,9 +104,9 @@ body {
 
   h1 {
     margin: 0;
-    font-size: 1.5rem;
-    font-weight: 650;
-    letter-spacing: -0.01em;
+    font-size: clamp(1.75rem, 2.5vw, 2.35rem);
+    font-weight: 680;
+    letter-spacing: -0.045em;
   }
 
   p {
@@ -117,6 +127,7 @@ body {
   border: 1px solid var(--bs-border-color);
   border-radius: var(--radius);
   overflow: clip; // keeps rounded corners without breaking sticky table headers
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.04), 0 12px 30px rgb(19 32 27 / 0.035);
 }
 
 .panel-body {
@@ -128,9 +139,9 @@ body {
   align-items: center;
   gap: 0.5rem;
   margin: 0 0 0.6rem;
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
   text-transform: uppercase;
   color: var(--bs-secondary-color);
 }
@@ -162,7 +173,7 @@ body {
 // Controls
 
 .btn {
-  --bs-btn-border-radius: 8px;
+  --bs-btn-border-radius: 10px;
   --bs-btn-font-weight: 500;
   --bs-btn-padding-y: 0.4rem;
   transition: transform 160ms var(--ease-out), background-color 150ms ease, border-color 150ms ease, color 150ms ease;
@@ -252,7 +263,7 @@ body {
 .form-select {
   background-color: var(--surface);
   border-color: var(--bs-border-color);
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 .form-check-input:checked {
