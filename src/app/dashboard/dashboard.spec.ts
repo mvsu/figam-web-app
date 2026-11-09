@@ -4,15 +4,44 @@ import { BatteryNow } from '../api';
 import { SystemService } from '../system.service';
 import { Dashboard } from './dashboard';
 
-const overview = { os: { name: 'Windows 11', release: '26100', arch: 'x64' }, cpu: { name: 'CPU', cores: 8, threads: 16, ghz: 3 }, ramTotal: 16e9, ramModules: [], gpus: [], disks: [], board: 'Board' };
-const live = { cpu: 12, ram: { used: 8e9, total: 16e9 }, disks: [{ name: 'C:', used: 100, size: 400 }], uptime: 3600 };
-const bat = (over: Partial<BatteryNow> = {}): BatteryNow => ({ present: true, percent: 100, state: 'full', health: 97.7, ...over });
+const overview = {
+  os: { name: 'Windows 11', release: '26100', arch: 'x64' },
+  cpu: { name: 'CPU', cores: 8, threads: 16, ghz: 3 },
+  ramTotal: 16e9,
+  ramModules: [],
+  gpus: [],
+  disks: [],
+  board: 'Board',
+};
+const live = {
+  cpu: 12,
+  ram: { used: 8e9, total: 16e9 },
+  disks: [{ name: 'C:', used: 100, size: 400 }],
+  uptime: 3600,
+};
+const bat = (over: Partial<BatteryNow> = {}): BatteryNow => ({
+  present: true,
+  percent: 100,
+  state: 'full',
+  health: 97.7,
+  ...over,
+});
 
 function setup(battery: () => Promise<BatteryNow>) {
   const calls = { battery: 0 };
-  const fake = { overview: async () => overview, live: async () => live, battery: async () => { calls.battery++; return battery(); } };
+  const fake = {
+    overview: async () => overview,
+    live: async () => live,
+    battery: async () => {
+      calls.battery++;
+      return battery();
+    },
+  };
   TestBed.resetTestingModule();
-  TestBed.configureTestingModule({ imports: [Dashboard], providers: [{ provide: SystemService, useValue: fake }] });
+  TestBed.configureTestingModule({
+    imports: [Dashboard],
+    providers: [{ provide: SystemService, useValue: fake }],
+  });
   const fixture = TestBed.createComponent(Dashboard);
   return { fixture, el: fixture.nativeElement as HTMLElement, calls };
 }
@@ -29,7 +58,8 @@ const flushFake = async (fixture: { whenStable(): Promise<unknown>; detectChange
   await fixture.whenStable();
   fixture.detectChanges();
 };
-const labels = (el: HTMLElement) => Array.from(el.querySelectorAll('.stat-label')).map((l) => l.textContent?.trim());
+const labels = (el: HTMLElement) =>
+  Array.from(el.querySelectorAll('.stat-label')).map((l) => l.textContent?.trim());
 
 afterEach(() => {
   vi.useRealTimers();
@@ -39,8 +69,19 @@ describe('Dashboard: battery card', () => {
   it('a laptop gets a Battery card with the charge, the state and the health, next to CPU, Memory and Uptime', async () => {
     const { fixture, el } = setup(async () => bat());
     await flush(fixture);
-    expect(labels(el)).toEqual(['CPU', 'Memory', 'Uptime', 'Battery']);
-    const card = Array.from(el.querySelectorAll('.stat')).find((s) => s.textContent?.includes('Battery'))!;
+    expect(labels(el)).toEqual([
+      'CPU',
+      'Memory',
+      'Uptime',
+      'Battery',
+      'CPU',
+      'Memory',
+      'Uptime',
+      'Battery',
+    ]);
+    const card = Array.from(el.querySelectorAll('.stat')).find((s) =>
+      s.textContent?.includes('Battery'),
+    )!;
     expect(card.textContent).toContain('100%');
     expect(card.textContent).toContain('Plugged in, full · Health 98%');
     fixture.destroy();
@@ -55,7 +96,10 @@ describe('Dashboard: battery card', () => {
     ] as const) {
       const { fixture, el } = setup(async () => bat(over));
       await flush(fixture);
-      expect(Array.from(el.querySelectorAll('.stat')).find((s) => s.textContent?.includes('Battery'))?.textContent).toContain(line);
+      expect(
+        Array.from(el.querySelectorAll('.stat')).find((s) => s.textContent?.includes('Battery'))
+          ?.textContent,
+      ).toContain(line);
       fixture.destroy();
     }
   });
@@ -64,7 +108,7 @@ describe('Dashboard: battery card', () => {
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
     const { fixture, el, calls } = setup(async () => ({ present: false }));
     await flushFake(fixture);
-    expect(labels(el)).toEqual(['CPU', 'Memory', 'Uptime']);
+    expect(labels(el)).toEqual(['CPU', 'Memory', 'Uptime', 'CPU', 'Memory', 'Uptime']);
     await vi.advanceTimersByTimeAsync(120000);
     expect(calls.battery).toBe(1);
     fixture.destroy();
@@ -87,7 +131,10 @@ describe('Dashboard: battery card', () => {
   it('a failed read leaves the card as it was and tries again later', async () => {
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
     let n = 0;
-    const { fixture, el } = setup(async () => { if (n++ === 1) throw new Error('wmi busy'); return bat({ percent: n === 1 ? 90 : 80 }); });
+    const { fixture, el } = setup(async () => {
+      if (n++ === 1) throw new Error('wmi busy');
+      return bat({ percent: n === 1 ? 90 : 80 });
+    });
     await flushFake(fixture);
     expect(el.textContent).toContain('90%');
     await vi.advanceTimersByTimeAsync(30000);

@@ -1,4 +1,4 @@
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe, NgTemplateOutlet } from '@angular/common';
 import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { BatteryNow, Live, Overview } from '../api';
 import { errorText, formatBytes, formatUptime } from '../format';
@@ -25,7 +25,7 @@ interface Sample {
 }
 
 @Component({
-  imports: [DatePipe, DecimalPipe, Icon],
+  imports: [DatePipe, DecimalPipe, NgTemplateOutlet, Icon],
   selector: 'app-dashboard',
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
@@ -54,10 +54,23 @@ export class Dashboard implements OnInit, OnDestroy {
   // Newest sample sits at the right edge; older ones step left.
   private readonly plot = computed(() => {
     const h = this.history();
-    return h.map((s, i) => ({ t: s.t, x: RIGHT - (h.length - 1 - i) * STEP, cpuY: yOf(s.cpu), ramY: yOf(s.ram) }));
+    return h.map((s, i) => ({
+      t: s.t,
+      x: RIGHT - (h.length - 1 - i) * STEP,
+      cpuY: yOf(s.cpu),
+      ramY: yOf(s.ram),
+    }));
   });
-  protected readonly cpuLine = computed(() => this.plot().map((p) => `${p.x},${p.cpuY}`).join(' '));
-  protected readonly ramLine = computed(() => this.plot().map((p) => `${p.x},${p.ramY}`).join(' '));
+  protected readonly cpuLine = computed(() =>
+    this.plot()
+      .map((p) => `${p.x},${p.cpuY}`)
+      .join(' '),
+  );
+  protected readonly ramLine = computed(() =>
+    this.plot()
+      .map((p) => `${p.x},${p.ramY}`)
+      .join(' '),
+  );
   protected readonly last = computed(() => this.plot().at(-1));
   protected readonly hovered = computed(() => {
     const t = this.hoverT();
@@ -70,27 +83,49 @@ export class Dashboard implements OnInit, OnDestroy {
     if (!o) return [];
     const fmt = formatBytes;
     return [
-      { title: 'Processor', icon: 'cpu', lines: [o.cpu.name, `${o.cpu.cores} cores, ${o.cpu.threads} threads, ${o.cpu.ghz} GHz base`] },
+      {
+        title: 'Processor',
+        icon: 'cpu',
+        lines: [
+          o.cpu.name,
+          `${o.cpu.cores} cores, ${o.cpu.threads} threads, ${o.cpu.ghz} GHz base`,
+        ],
+      },
       {
         title: 'Memory',
         icon: 'memory',
-        lines: [`${fmt(o.ramTotal)} total`, ...o.ramModules.map((m) => `${fmt(m.size)} ${m.type ?? ''} ${m.mhz ? m.mhz + ' MHz' : ''}`.trim())],
+        lines: [
+          `${fmt(o.ramTotal)} total`,
+          ...o.ramModules.map((m) =>
+            `${fmt(m.size)} ${m.type ?? ''} ${m.mhz ? m.mhz + ' MHz' : ''}`.trim(),
+          ),
+        ],
       },
       {
         title: 'Graphics',
         icon: 'gpu',
         lines: o.gpus.length
-          ? o.gpus.flatMap((g) => [g.model, `${fmt(g.vramMb * 1024 * 1024)} VRAM, driver ${g.driver}`])
+          ? o.gpus.flatMap((g) => [
+              g.model,
+              `${fmt(g.vramMb * 1024 * 1024)} VRAM, driver ${g.driver}`,
+            ])
           : ['No graphics card detected'],
       },
-      { title: 'Storage', icon: 'disk', lines: o.disks.map((d) => `${d.name}, ${d.type}, ${fmt(d.size)}`) },
+      {
+        title: 'Storage',
+        icon: 'disk',
+        lines: o.disks.map((d) => `${d.name}, ${d.type}, ${fmt(d.size)}`),
+      },
       { title: 'Motherboard', icon: 'board', lines: [o.board] },
       { title: 'Operating system', icon: 'os', lines: [`${o.os.name} ${o.os.release}`, o.os.arch] },
     ];
   });
 
   ngOnInit() {
-    this.sys.overview().then((o) => this.overview.set(o), (e) => this.error.set(errorText(e)));
+    this.sys.overview().then(
+      (o) => this.overview.set(o),
+      (e) => this.error.set(errorText(e)),
+    );
     this.poll();
     this.pollBattery();
   }
@@ -114,7 +149,13 @@ export class Dashboard implements OnInit, OnDestroy {
   }
 
   protected batteryLine(b: BatteryNow) {
-    const state = { charging: 'Charging', discharging: 'On battery', full: 'Plugged in, full', plugged: 'Plugged in, not charging', unknown: 'State not reported' }[b.state ?? 'unknown'];
+    const state = {
+      charging: 'Charging',
+      discharging: 'On battery',
+      full: 'Plugged in, full',
+      plugged: 'Plugged in, not charging',
+      unknown: 'State not reported',
+    }[b.state ?? 'unknown'];
     return b.health != null ? `${state} · Health ${Math.round(b.health)}%` : state;
   }
 
@@ -122,7 +163,11 @@ export class Dashboard implements OnInit, OnDestroy {
     try {
       const l = await this.sys.live();
       this.live.set(l);
-      this.history.update((h) => [...h, { t: Date.now(), cpu: l.cpu, ram: (l.ram.used / l.ram.total) * 100 }].slice(-MAX_SAMPLES));
+      this.history.update((h) =>
+        [...h, { t: Date.now(), cpu: l.cpu, ram: (l.ram.used / l.ram.total) * 100 }].slice(
+          -MAX_SAMPLES,
+        ),
+      );
       this.error.set(null);
     } catch (e) {
       this.error.set(errorText(e));

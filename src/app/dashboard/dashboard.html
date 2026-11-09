@@ -10,48 +10,63 @@
     <div class="alert alert-danger" role="alert">{{ e }}</div>
   }
 
-  <div class="row g-3 mb-3">
-    <div class="col-md">
-      <div class="panel stat h-100">
-        <div class="stat-label"><app-icon name="cpu" />CPU</div>
-        <div class="stat-value">{{ percentText(cpuNow()) }}</div>
-        <div class="stat-sub text-body-secondary">
-          @if (overview(); as o) {
-            {{ o.cpu.cores }} cores, {{ o.cpu.threads }} threads
-          }
-        </div>
-      </div>
-    </div>
-    <div class="col-md">
-      <div class="panel stat h-100">
-        <div class="stat-label"><app-icon name="memory" />Memory</div>
-        <div class="stat-value">{{ percentText(ramNow()) }}</div>
-        <div class="stat-sub text-body-secondary">
-          @if (live(); as l) {
-            {{ fmt(l.ram.used) }} of {{ fmt(l.ram.total) }} in use
-          }
-        </div>
-      </div>
-    </div>
-    <div class="col-md">
-      <div class="panel stat h-100">
-        <div class="stat-label"><app-icon name="clock" />Uptime</div>
-        <div class="stat-value">{{ live() ? uptimeText(live()!.uptime) : '-' }}</div>
-        <div class="stat-sub text-body-secondary">Since the last restart</div>
-      </div>
-    </div>
-    @if (battery(); as b) {
-      @if (b.present) {
-        <div class="col-md">
-          <div class="panel stat h-100">
-            <div class="stat-label"><app-icon name="battery" />Battery</div>
-            <div class="stat-value">{{ b.percent != null ? b.percent + '%' : '-' }}</div>
-            <div class="stat-sub text-body-secondary">{{ batteryLine(b) }}</div>
+  <div class="search mb-3">
+    <app-icon name="search" />
+    <input
+      class="form-control w-100"
+      type="search"
+      placeholder="Filter the list, for example browser"
+      aria-label="Filter the dashboard"
+    />
+  </div>
+
+  <ng-template #statsRow>
+    <div class="row g-3 mb-3">
+      <div class="col-md">
+        <div class="panel stat h-100">
+          <div class="stat-label"><app-icon name="cpu" />CPU</div>
+          <div class="stat-value">{{ percentText(cpuNow()) }}</div>
+          <div class="stat-sub text-body-secondary">
+            @if (overview(); as o) {
+              {{ o.cpu.cores }} cores, {{ o.cpu.threads }} threads
+            }
           </div>
         </div>
+      </div>
+      <div class="col-md">
+        <div class="panel stat h-100">
+          <div class="stat-label"><app-icon name="memory" />Memory</div>
+          <div class="stat-value">{{ percentText(ramNow()) }}</div>
+          <div class="stat-sub text-body-secondary">
+            @if (live(); as l) {
+              {{ fmt(l.ram.used) }} of {{ fmt(l.ram.total) }} in use
+            }
+          </div>
+        </div>
+      </div>
+      <div class="col-md">
+        <div class="panel stat h-100">
+          <div class="stat-label"><app-icon name="clock" />Uptime</div>
+          <div class="stat-value">{{ live() ? uptimeText(live()!.uptime) : '-' }}</div>
+          <div class="stat-sub text-body-secondary">Since the last restart</div>
+        </div>
+      </div>
+      @if (battery(); as b) {
+        @if (b.present) {
+          <div class="col-md">
+            <div class="panel stat h-100">
+              <div class="stat-label"><app-icon name="battery" />Battery</div>
+              <div class="stat-value">{{ b.percent != null ? b.percent + '%' : '-' }}</div>
+              <div class="stat-sub text-body-secondary">{{ batteryLine(b) }}</div>
+            </div>
+          </div>
+        }
       }
-    }
-  </div>
+    </div>
+  </ng-template>
+
+  <ng-container [ngTemplateOutlet]="statsRow" />
+  <ng-container [ngTemplateOutlet]="statsRow" />
 
   <div class="row g-3 mb-3">
     <div class="col-lg-8">
@@ -70,17 +85,33 @@
             (pointermove)="onMove($event)"
           >
             @for (t of ticks; track t.v) {
-              <line class="grid" [attr.x1]="view.LEFT" [attr.x2]="view.RIGHT" [attr.y1]="t.y" [attr.y2]="t.y" />
-              <text class="tick" [attr.x]="view.LEFT - 6" [attr.y]="t.y + 4" text-anchor="end">{{ t.v }}%</text>
+              <line
+                class="grid"
+                [attr.x1]="view.LEFT"
+                [attr.x2]="view.RIGHT"
+                [attr.y1]="t.y"
+                [attr.y2]="t.y"
+              />
+              <text class="tick" [attr.x]="view.LEFT - 6" [attr.y]="t.y + 4" text-anchor="end">
+                {{ t.v }}%
+              </text>
             }
             <text class="tick" [attr.x]="view.LEFT" [attr.y]="view.H - 4">2 min ago</text>
-            <text class="tick" [attr.x]="view.RIGHT" [attr.y]="view.H - 4" text-anchor="end">now</text>
+            <text class="tick" [attr.x]="view.RIGHT" [attr.y]="view.H - 4" text-anchor="end">
+              now
+            </text>
 
             <polyline class="line cpu" [attr.points]="cpuLine()" />
             <polyline class="line ram" [attr.points]="ramLine()" />
 
             @if (hovered(); as h) {
-              <line class="crosshair" [attr.x1]="h.point.x" [attr.x2]="h.point.x" [attr.y1]="view.TOP" [attr.y2]="view.BOTTOM" />
+              <line
+                class="crosshair"
+                [attr.x1]="h.point.x"
+                [attr.x2]="h.point.x"
+                [attr.y1]="view.TOP"
+                [attr.y2]="view.BOTTOM"
+              />
               <circle class="dot cpu" [attr.cx]="h.point.x" [attr.cy]="h.point.cpuY" r="4" />
               <circle class="dot ram" [attr.cx]="h.point.x" [attr.cy]="h.point.ramY" r="4" />
             } @else if (last(); as p) {
@@ -89,10 +120,20 @@
             }
           </svg>
           @if (hovered(); as h) {
-            <div class="tip" [class.flip]="h.point.x > view.W / 2" [style.left.%]="(h.point.x / view.W) * 100">
+            <div
+              class="tip"
+              [class.flip]="h.point.x > view.W / 2"
+              [style.left.%]="(h.point.x / view.W) * 100"
+            >
               <div class="text-body-secondary">{{ h.sample.t | date: 'mediumTime' }}</div>
-              <div><i class="line-key cpu"></i><strong>{{ h.sample.cpu | number: '1.0-0' }}%</strong> CPU</div>
-              <div><i class="line-key ram"></i><strong>{{ h.sample.ram | number: '1.0-0' }}%</strong> Memory</div>
+              <div>
+                <i class="line-key cpu"></i
+                ><strong>{{ h.sample.cpu | number: '1.0-0' }}%</strong> CPU
+              </div>
+              <div>
+                <i class="line-key ram"></i
+                ><strong>{{ h.sample.ram | number: '1.0-0' }}%</strong> Memory
+              </div>
             </div>
           }
         </div>
@@ -106,9 +147,18 @@
           <div class="mb-3">
             <div class="d-flex justify-content-between">
               <strong>{{ d.name }}</strong>
-              <span class="text-body-secondary">{{ fmt(d.size - d.used) }} free of {{ fmt(d.size) }}</span>
+              <span class="text-body-secondary"
+                >{{ fmt(d.size - d.used) }} free of {{ fmt(d.size) }}</span
+              >
             </div>
-            <div class="progress mt-1" role="progressbar" [attr.aria-label]="'Disk ' + d.name + ' used'" [attr.aria-valuenow]="diskPct(d)" aria-valuemin="0" aria-valuemax="100">
+            <div
+              class="progress mt-1"
+              role="progressbar"
+              [attr.aria-label]="'Disk ' + d.name + ' used'"
+              [attr.aria-valuenow]="diskPct(d)"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
               <div [class]="'progress-bar ' + severity(d)" [style.width.%]="diskPct(d)"></div>
             </div>
           </div>
