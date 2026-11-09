@@ -1,4 +1,5 @@
 export type ThemeMode = 'light' | 'dark' | 'system';
+export type ThemeColor = 'green' | 'blue' | 'violet' | 'amber';
 
 export interface Overview {
   os: { name: string; release: string; arch: string };

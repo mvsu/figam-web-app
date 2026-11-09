@@ -11,7 +11,10 @@
     try {
       var m = localStorage.getItem('theme');
       var dark = m === 'dark' || (m !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+      var c = localStorage.getItem('theme-color');
+      var color = c === 'blue' || c === 'violet' || c === 'amber' ? c : 'green';
       document.documentElement.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme-color', color);
     } catch (e) {}
   </script>
 </head>

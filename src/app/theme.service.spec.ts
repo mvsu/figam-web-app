@@ -18,4 +18,11 @@ describe('ThemeService', () => {
     theme.set('system');
     expect(document.documentElement.dataset['bsTheme']).toBe('light');
   });
+
+  it('applies and remembers the chosen color across the whole theme', () => {
+    const theme = TestBed.inject(ThemeService);
+    theme.setColor('violet');
+    expect(document.documentElement.dataset['themeColor']).toBe('violet');
+    expect(localStorage.getItem('theme-color')).toBe('violet');
+  });
 });

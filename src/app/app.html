@@ -38,6 +38,22 @@
           </button>
         }
       </div>
+      <span class="palette-caption" id="theme-color-label">Theme color</span>
+      <div class="palette-options" role="group" aria-labelledby="theme-color-label">
+        @for (color of colors; track color.id) {
+          <button
+            type="button"
+            [class]="'palette-option palette-' + color.id"
+            [attr.aria-pressed]="theme.color() === color.id"
+            [attr.aria-label]="color.label + ' theme'"
+            [title]="color.label + ' theme'"
+            (click)="theme.setColor(color.id)"
+          >
+            <span class="palette-swatch"></span>
+            <span>{{ color.label }}</span>
+          </button>
+        }
+      </div>
     </div>
   </aside>
 

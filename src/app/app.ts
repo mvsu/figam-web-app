@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { ThemeMode } from './api';
+import { ThemeColor, ThemeMode } from './api';
 import { Icon } from './icon';
 import { ThemeService } from './theme.service';
 import { UiHost } from './ui-host';
@@ -17,5 +17,11 @@ export class App {
     { id: 'light', label: 'Light', icon: 'sun' },
     { id: 'system', label: 'Match Windows', icon: 'monitor' },
     { id: 'dark', label: 'Dark', icon: 'moon' },
+  ];
+  protected readonly colors: { id: ThemeColor; label: string }[] = [
+    { id: 'green', label: 'Green' },
+    { id: 'blue', label: 'Blue' },
+    { id: 'violet', label: 'Violet' },
+    { id: 'amber', label: 'Amber' },
   ];
 }

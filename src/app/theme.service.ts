@@ -1,7 +1,8 @@
 import { Injectable, signal } from '@angular/core';
-import { ThemeMode } from './api';
+import { ThemeColor, ThemeMode } from './api';
 
 const KEY = 'theme';
+const COLOR_KEY = 'theme-color';
 
 function stored(): ThemeMode {
   try {
@@ -12,9 +13,19 @@ function stored(): ThemeMode {
   }
 }
 
+function storedColor(): ThemeColor {
+  try {
+    const value = localStorage.getItem(COLOR_KEY);
+    return value === 'blue' || value === 'violet' || value === 'amber' ? value : 'green';
+  } catch {
+    return 'green';
+  }
+}
+
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
   readonly mode = signal<ThemeMode>(stored());
+  readonly color = signal<ThemeColor>(storedColor());
   private readonly darkQuery = window.matchMedia?.('(prefers-color-scheme: dark)');
 
   constructor() {
@@ -34,9 +45,20 @@ export class ThemeService {
     window.api?.setTheme(mode); // also themes the window frame
   }
 
+  setColor(color: ThemeColor) {
+    this.color.set(color);
+    try {
+      localStorage.setItem(COLOR_KEY, color);
+    } catch {
+      // storage blocked: the choice just isn't remembered
+    }
+    this.apply();
+  }
+
   private apply() {
     const m = this.mode();
     const dark = m === 'dark' || (m === 'system' && !!this.darkQuery?.matches);
     document.documentElement.dataset['bsTheme'] = dark ? 'dark' : 'light';
+    document.documentElement.dataset['themeColor'] = this.color();
   }
 }
