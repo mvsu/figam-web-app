@@ -39,7 +39,7 @@ describe('Dashboard: battery card', () => {
   it('a laptop gets a Battery card with the charge, the state and the health, next to CPU, Memory and Uptime', async () => {
     const { fixture, el } = setup(async () => bat());
     await flush(fixture);
-    expect(labels(el)).toEqual(['CPU', 'Memory', 'Uptime', 'Battery']);
+    expect(labels(el)).toEqual(['CPU', 'Memory', 'Uptime', 'Battery', 'CPU', 'Memory', 'Uptime']);
     const card = Array.from(el.querySelectorAll('.stat')).find((s) => s.textContent?.includes('Battery'))!;
     expect(card.textContent).toContain('100%');
     expect(card.textContent).toContain('Plugged in, full · Health 98%');
@@ -64,7 +64,7 @@ describe('Dashboard: battery card', () => {
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
     const { fixture, el, calls } = setup(async () => ({ present: false }));
     await flushFake(fixture);
-    expect(labels(el)).toEqual(['CPU', 'Memory', 'Uptime']);
+    expect(labels(el)).toEqual(['CPU', 'Memory', 'Uptime', 'CPU', 'Memory', 'Uptime']);
     await vi.advanceTimersByTimeAsync(120000);
     expect(calls.battery).toBe(1);
     fixture.destroy();

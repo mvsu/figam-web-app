@@ -22,7 +22,7 @@
       <div class="panel stat stat-cpu h-100">
         <div class="stat-top"><div class="stat-label"><app-icon name="cpu" />CPU</div><span>01</span></div>
         <div class="stat-value">{{ percentText(cpuNow()) }}</div>
-        <div class="stat-sub text-body-secondary">
+        <div class="stat-sub">
           @if (overview(); as o) {
             {{ o.cpu.cores }} cores, {{ o.cpu.threads }} threads
           }
@@ -33,7 +33,7 @@
       <div class="panel stat stat-memory h-100">
         <div class="stat-top"><div class="stat-label"><app-icon name="memory" />Memory</div><span>02</span></div>
         <div class="stat-value">{{ percentText(ramNow()) }}</div>
-        <div class="stat-sub text-body-secondary">
+        <div class="stat-sub">
           @if (live(); as l) {
             {{ fmt(l.ram.used) }} of {{ fmt(l.ram.total) }} in use
           }
@@ -44,7 +44,7 @@
       <div class="panel stat stat-uptime h-100">
         <div class="stat-top"><div class="stat-label"><app-icon name="clock" />Uptime</div><span>03</span></div>
         <div class="stat-value">{{ live() ? uptimeText(live()!.uptime) : '-' }}</div>
-        <div class="stat-sub text-body-secondary">Since the last restart</div>
+        <div class="stat-sub">Since the last restart</div>
       </div>
     </div>
     @if (battery(); as b) {
@@ -53,11 +53,43 @@
           <div class="panel stat stat-battery h-100">
             <div class="stat-top"><div class="stat-label"><app-icon name="battery" />Battery</div><span>04</span></div>
             <div class="stat-value">{{ b.percent != null ? b.percent + '%' : '-' }}</div>
-            <div class="stat-sub text-body-secondary">{{ batteryLine(b) }}</div>
+            <div class="stat-sub">{{ batteryLine(b) }}</div>
           </div>
         </div>
       }
     }
+  </div>
+
+  <div class="metric-grid mb-3">
+    <div class="col-md">
+      <div class="panel stat stat-cpu h-100">
+        <div class="stat-top"><div class="stat-label"><app-icon name="cpu" />CPU</div><span>01</span></div>
+        <div class="stat-value">{{ percentText(cpuNow()) }}</div>
+        <div class="stat-sub">
+          @if (overview(); as o) {
+            {{ o.cpu.cores }} cores, {{ o.cpu.threads }} threads
+          }
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div class="panel stat stat-memory h-100">
+        <div class="stat-top"><div class="stat-label"><app-icon name="memory" />Memory</div><span>02</span></div>
+        <div class="stat-value">{{ percentText(ramNow()) }}</div>
+        <div class="stat-sub">
+          @if (live(); as l) {
+            {{ fmt(l.ram.used) }} of {{ fmt(l.ram.total) }} in use
+          }
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div class="panel stat stat-uptime h-100">
+        <div class="stat-top"><div class="stat-label"><app-icon name="clock" />Uptime</div><span>03</span></div>
+        <div class="stat-value">{{ live() ? uptimeText(live()!.uptime) : '-' }}</div>
+        <div class="stat-sub">Since the last restart</div>
+      </div>
+    </div>
   </div>
 
   <div class="row g-3 mb-3">

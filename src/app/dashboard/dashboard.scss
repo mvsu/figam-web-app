@@ -42,6 +42,9 @@
   position: relative;
   min-height: 164px;
   padding: 1.1rem 1.2rem;
+  color: var(--surface);
+  background: var(--accent);
+  border-color: var(--surface);
 
   &::after {
     position: absolute;
@@ -50,7 +53,7 @@
     width: 100px;
     height: 100px;
     content: "";
-    background: var(--metric-tint, var(--accent-soft));
+    background: rgb(255 255 255 / 0.18);
     border-radius: 50%;
   }
 }
@@ -64,7 +67,7 @@
     font-size: 0.62rem;
     font-weight: 700;
     letter-spacing: 0.12em;
-    color: var(--bs-border-color);
+    color: var(--surface);
   }
 }
 
@@ -72,6 +75,7 @@
   font-size: 0.68rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  color: var(--bs-border-color);
 }
 
 .stat-value {
@@ -86,11 +90,8 @@
   z-index: 1;
   max-width: 13rem;
   font-size: 0.74rem;
+  color: var(--bs-border-color);
 }
-
-.stat-memory { --metric-tint: color-mix(in srgb, var(--viz-ram) 18%, transparent); }
-.stat-uptime { --metric-tint: color-mix(in srgb, #7c72db 18%, transparent); }
-.stat-battery { --metric-tint: color-mix(in srgb, #b7f267 25%, transparent); }
 
 .chart {
   position: relative;
