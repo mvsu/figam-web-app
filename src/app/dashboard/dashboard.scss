@@ -1,11 +1,209 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 36px);
+}
+
+.page-head {
+  align-items: center;
+  min-height: 98px;
+  margin-bottom: 18px;
+
+  h1 {
+    margin-top: 12px;
+    font-size: 2.1rem;
+    font-weight: 600;
+    line-height: 1;
+    color: #183f35;
+  }
+
+  p {
+    margin-top: 12px;
+    font-size: 0.94rem;
+  }
+}
+
+.eyebrow {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #63756d;
+}
+
+.monitor-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 190px;
+  padding: 12px 18px;
+  color: #183f35;
+  background: #e3ebdc;
+  border-radius: 99px;
+
+  span {
+    width: 7px;
+    height: 7px;
+    background: #6a7b60;
+    border-radius: 50%;
+  }
+}
+
+.system-notice {
+  position: relative;
+  min-height: 66px;
+  margin-bottom: 28px;
+  padding: 22px;
+  color: #6c5726;
+  background: #f3eacd;
+  border-radius: 14px;
+
+  &::before {
+    position: absolute;
+    top: 14px;
+    bottom: 14px;
+    left: 0;
+    width: 3px;
+    content: '';
+    background: #b59543;
+    border-radius: 2px;
+  }
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+  grid-template-rows: 213px 213px 206px;
+  gap: 24px;
+}
+
+.usage-panel {
+  grid-row: 1 / 3;
+  padding: 24px 26px;
+}
+
+.usage-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.usage-legend {
+  display: flex;
+  gap: 30px;
+}
+
+.panel-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #183f35;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border: 0;
+}
+
+.stat-label {
+  gap: 14px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: inherit;
+}
+
+.stat-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  color: #638147;
+  background: #e5edd9;
+  border-radius: 12px;
+}
+
+.stat-value {
+  margin: auto 0 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color: inherit;
+}
+
+.stat-sub {
+  min-height: 0;
+  margin-top: 28px;
+  font-size: 0.82rem;
+  color: #72837b;
+}
+
+.cpu-stat {
+  color: #fff;
+  background: #123c32;
+
+  .stat-icon {
+    color: #c4f078;
+    background: #2b5447;
+  }
+
+  .stat-sub {
+    color: #a9beb6;
+  }
+}
+
+.memory-stat {
+  background: #e4edda;
+}
+
+.uptime-stat {
+  grid-row: 3;
+  grid-column: 1;
+  width: calc(50% - 12px);
+}
+
+.disk-panel {
+  grid-row: 3;
+  grid-column: 1 / 3;
+  margin-left: calc((100% - 24px) / 3 + 16px);
+  padding: 24px 26px;
+
+  .panel-title {
+    gap: 14px;
+  }
+}
+
+.disk-reading {
+  margin: 38px 0 0;
+  font-size: 1.25rem;
+  color: #63756d;
+}
+
+.disk-caption {
+  margin: 28px 0 0;
+  font-size: 0.82rem;
+  color: #839089;
+}
+
+.disk-row {
+  margin-top: 24px;
+}
+
+.battery-stat {
+  min-height: 180px;
+}
+
 .chart {
   position: relative;
+  height: 350px;
+  margin-top: 22px;
 }
 
 svg {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
 }
 
 .grid {
@@ -44,17 +242,32 @@ svg {
 
 .line-key {
   display: inline-block;
-  width: 14px;
-  height: 2px;
-  margin-right: 6px;
+  width: 16px;
+  height: 4px;
+  margin-right: 9px;
   vertical-align: middle;
+  border-radius: 2px;
 
   &.cpu { background: var(--viz-cpu); }
   &.ram { background: var(--viz-ram); }
 }
 
 .legend {
+  font-size: 0.78rem;
   color: var(--bs-secondary-color);
+}
+
+.waiting {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 322px;
+  padding: 17px 24px;
+  text-align: center;
+  color: #63756d;
+  background: #f3f5ef;
+  border-radius: 99px;
+  transform: translate(-50%, -50%);
 }
 
 .tip {
@@ -81,4 +294,56 @@ svg {
 
 .progress-bar {
   border-radius: 99px;
+}
+
+@media (max-width: 1100px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 390px auto auto;
+  }
+
+  .usage-panel {
+    grid-row: 1;
+    grid-column: 1 / 3;
+  }
+
+  .cpu-stat,
+  .memory-stat {
+    min-height: 190px;
+  }
+
+  .uptime-stat {
+    grid-row: 3;
+    grid-column: 1;
+    width: auto;
+  }
+
+  .disk-panel {
+    grid-row: 3;
+    grid-column: 2;
+    margin-left: 0;
+  }
+
+  .chart {
+    height: 280px;
+  }
+}
+
+@media (max-width: 700px) {
+  .monitor-status {
+    display: none;
+  }
+
+  .dashboard-grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .uptime-stat {
+    width: auto;
+  }
+
+  .waiting {
+    min-width: 230px;
+  }
 }

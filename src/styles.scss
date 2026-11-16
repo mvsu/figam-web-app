@@ -2,29 +2,29 @@
 
 :root {
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --radius: 12px;
+  --radius: 20px;
   --bs-body-font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
   --bs-body-font-size: 0.875rem;
 }
 
 // Both themes redefine the same tokens, so components only use var(--token).
 [data-bs-theme="light"] {
-  --bs-body-bg: #f4f5f8;
-  --bs-body-color: #1a2030;
-  --bs-secondary-color: #5d6679;
-  --bs-border-color: #e1e4eb;
-  --bs-primary: #2f5fe0;
-  --bs-primary-rgb: 47, 95, 224;
+  --bs-body-bg: #f3f5ef;
+  --bs-body-color: #183f35;
+  --bs-secondary-color: #63756d;
+  --bs-border-color: #e0e7df;
+  --bs-primary: #388165;
+  --bs-primary-rgb: 56, 129, 101;
   --surface: #ffffff;
-  --surface-2: #eef0f5;
-  --accent: #2f5fe0;
-  --accent-ink: #2449b8;
-  --accent-soft: #e6ecfd;
+  --surface-2: #f0f2e9;
+  --accent: #c4f078;
+  --accent-ink: #123c32;
+  --accent-soft: #e4edda;
   --danger: #c62d3d;
-  --danger-soft: #fdecee;
-  --ok: #1a8f3c;
-  --viz-cpu: #2a78d6;
-  --viz-ram: #eb6834;
+  --danger-soft: #f3eacd;
+  --ok: #388165;
+  --viz-cpu: #388165;
+  --viz-ram: #b29a51;
 }
 
 [data-bs-theme="dark"] {
@@ -157,6 +157,35 @@ body {
 
 .stat-sub {
   min-height: 1.3em;
+}
+
+.dashboard-hardware-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.dashboard-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  padding: 24px 2px 0;
+  font-size: 0.68rem;
+  color: #63756d;
+}
+
+@media (max-width: 1100px) {
+  .dashboard-hardware-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .dashboard-hardware-grid {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 // Controls
